@@ -5,6 +5,22 @@ ChatVRM-animateは、ブラウザウィンドウにドロップすることで�
 - FBX アニメーション
     - [@pixiv/three-vrm/examples/humanoidAnimation](https://github.com/pixiv/three-vrm/tree/dev/packages/three-vrm/examples/humanoidAnimation)
 
+## MoMask対応
+
+ニケによりさらに以下の改良がされています。
+
+- テキストを入力すると、返答内容に合わせて[MoMask](https://github.com/EricGuo5513/momask-codes)によるリアルタイムモーション生成が実行されます。
+
+### 実行方法
+
+1. MoMask動作環境をlibフォルダ内に作成してください。 `lib/momask-codes/` のようになるはずです。
+   READMEでも良いですが、[猩々博士の記事](https://note.com/mega_gorilla/n/n9657a9172ec2)も参考になりました。
+   `python gen_t2m.py` を実行して、bvhファイルが作成されれば問題ないと思います。
+2. `src\pages\api\momask.ts` の9行目のpythonの実行パスを変更してください。
+3. 以降は下記のChatVRMの方法に倣って進めてください。
+
+※ Windows x anaconda環境でのみ動作を確認しています。
+
 ## ChatVRM
 
 ChatVRMはブラウザで簡単に3Dキャラクターと会話ができるデモアプリケーションです。
