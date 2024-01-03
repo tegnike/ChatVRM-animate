@@ -15,6 +15,7 @@ import { Introduction } from "@/components/introduction";
 import { Menu } from "@/components/menu";
 import { GitHubLink } from "@/components/githubLink";
 import { Meta } from "@/components/meta";
+import { createAnime } from "@/features/animation/animation";
 
 export default function Home() {
   const { viewer } = useContext(ViewerContext);
@@ -155,14 +156,30 @@ export default function Home() {
             }
 
             const aiText = `${tag} ${sentence}`;
-            const aiTalks = textsToScreenplay([aiText], koeiroParam);
+  
+            // textsToScreenplayとcreateAnimeを並列に実行
+            const [aiTalks, vrmaPath] = await Promise.all([
+              textsToScreenplay([aiText], koeiroParam),
+              createAnime(aiText, openAiKey),
+            ]);
+  
+            console.log(vrmaPath);
             aiTextLog += aiText;
 
             // 文ごとに音声を生成 & 再生、返答を表示
             const currentAssistantMessage = sentences.join(" ");
-            handleSpeakAi(aiTalks[0], () => {
-              setAssistantMessage(currentAssistantMessage);
-            });
+            if (vrmaPath !== null) {
+              await Promise.all([
+                handleSpeakAi(aiTalks[0], () => {
+                  setAssistantMessage(currentAssistantMessage);
+                }),
+                viewer.loadVrma(vrmaPath),
+              ]);
+            } else {
+              await handleSpeakAi(aiTalks[0], () => {
+                setAssistantMessage(currentAssistantMessage);
+              });
+            }
           }
         }
       } catch (e) {
