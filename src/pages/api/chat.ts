@@ -27,7 +27,7 @@ export default async function handler(
   const openai = new OpenAIApi(configuration);
 
   const { data } = await openai.createChatCompletion({
-    model: "gpt-3.5-turbo",
+    model: "gpt-4.1",
     messages: req.body.messages,
   });
 
